@@ -20,8 +20,8 @@ const Home = ({ navigation }) => {
     useEffect(() => {
         const unsubscribe = navigation.addListener('focus', () => {
             AsyncStorage.getItem("userData").then((e) => {
-                console.log("eeeeeeeee",e)
-                if (e.length>0) {
+                console.log("eeeeeeeee", e)
+                if (Array.isArray(e) && e.length > 0) {
                     Setdata(JSON.parse(e))
                 }
             })
@@ -32,13 +32,13 @@ const Home = ({ navigation }) => {
 
     useEffect(() => {
         AsyncStorage.getItem("userData").then((e) => {
-            if (e) {
+            if (e && Array.isArray(e)) {
                 Setdata(e)
             } else {
                 AsyncStorage.setItem("userData", JSON.stringify([]))
             }
         })
-        console.log("dataaaaaaaa", data1.length )
+        console.log("dataaaaaaaa", data1.length)
     }, [])
 
     const featuresData = [
@@ -188,13 +188,13 @@ const Home = ({ navigation }) => {
                     horizontal
                     style={{ height: 120, width: "100%", }}>
                     {
-                        data1.length > 0 && data1.map((item) => {
+                        data1.length > 0 && data1.map((item, i) => {
                             console.log("item", item)
 
-                            return <>
+                            return <Fragment key={i} >
                                 <Text>{item}
                                 </Text>
-                            </>
+                            </Fragment>
                         })
                     }
                     <View style={{ height: "100%", width: Dimensions.get('window').width, borderRadius: 10, backgroundColor: COLORS.primary, }}>

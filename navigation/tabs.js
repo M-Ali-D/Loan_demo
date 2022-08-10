@@ -11,7 +11,7 @@ import Svg, {
 } from 'react-native-svg'
 import { isIphoneX } from 'react-native-iphone-x-helper'
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import { Home, Scan,Loan1 } from "../screens"
+import { Home, Scan, Loan1 } from "../screens"
 import { COLORS, icons } from "../constants"
 import Loan from "../screens/Loan";
 import Profile from "../screens/Profile";
