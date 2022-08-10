@@ -22,6 +22,14 @@
           }
         },
         {
+          "client_id": "64851009299-qct67iafspciqoifgcbi1bla232i0k98.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digitalwalletapp",
+            "certificate_hash": "23728cb185c56f275d3852f5dce6aa74d9565662"
+          }
+        },
+        {
           "client_id": "64851009299-hutrlgoosve0phinr9d8qm3vkprcg469.apps.googleusercontent.com",
           "client_type": 3
         }

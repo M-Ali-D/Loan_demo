@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
     View,
     Text,
@@ -31,6 +31,17 @@ const SignUp = ({ navigation }) => {
     const [otp, setotp] = React.useState(null)
     const [selectedArea, setSelectedArea] = React.useState(null)
     const [modalVisible, setModalVisible] = React.useState(false)
+
+
+    useEffect(() => {
+        AsyncStorage.getItem('Phone').then((e) => {
+            if (e != null) {
+                // Setphone(e)
+                return navigation.navigate({ name: "Home", merge: true });
+            }
+
+        })
+    }, [])
 
     React.useEffect(() => {
         fetch("https://restcountries.eu/rest/v2/all")
@@ -263,7 +274,7 @@ const SignUp = ({ navigation }) => {
                         justifyContent: 'center'
                     }}
                     onPress={() => {
-                        if (phone.length<11) {
+                        if (phone.length < 11) {
                             if (otp) {
                                 confirmCode()
                             } else

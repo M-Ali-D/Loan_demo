@@ -189,6 +189,14 @@ const Home = ({ navigation }) => {
             >
                 <ScrollView
                     horizontal
+                    // scrollIndicatorInsets={true}
+                    decelerationRate={0.5}
+                    horizontal={true}
+                    showsHorizontalScrollIndicator={false}
+                    // snapToInterval={ - (YOUR_INSET_LEFT + YOUR_INSET_RIGHT)}                    
+                    snapToInterval={Dimensions.get('window').width}
+                    snapToAlignment={"center"}
+                    showsHorizontalScrollIndicator={false}
                     style={{ height: 120, width: "100%", }}>
                     {
                         data1.length > 0 && data1.map((item, i) => {
