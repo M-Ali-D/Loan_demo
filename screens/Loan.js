@@ -83,11 +83,11 @@ const Loan = ({ navigation }) => {
                     arr.push(SubmitData)
                     AsyncStorage.setItem("userData", JSON.stringify(arr))
                     // navigation.navigate({ name: "Home", merge: true });
+                    AsyncStorage.getItem("userData").then((e) => {
+                        console.log("eeeeee", e)
+                    })
+                    navigation.navigate({ name: "Home", merge: true });
                 })
-                AsyncStorage.getItem("userData").then((e) => {
-                    console.log("eeeeee", e)
-                })
-                navigation.navigate({ name: "Home", merge: true });
 
             } else {
                 alert("Please fill all data")
@@ -321,10 +321,10 @@ const Loan = ({ navigation }) => {
                         </View>
                     </View>
                     <TouchableOpacity
-                        style={{top:7, height: 50, width: "40%", backgroundColor: 'green', justifyContent: "center", alignItems: 'center', borderRadius: 25 }}
+                        style={{ top: 7, height: 50, width: "40%", backgroundColor: 'green', justifyContent: "center", alignItems: 'center', borderRadius: 25 }}
                         onPress={() => {
                             dataSave()
-                            
+
                         }}
                     >
                         <Text style={{ fontWeight: 'bold', fontSize: 18, color: "#fff" }}>Continue</Text>

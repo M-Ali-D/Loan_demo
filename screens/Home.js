@@ -1,5 +1,5 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import React, { useEffect, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import {
     SafeAreaView,
     View,
@@ -21,8 +21,9 @@ const Home = ({ navigation }) => {
         const unsubscribe = navigation.addListener('focus', () => {
             AsyncStorage.getItem("userData").then((e) => {
                 console.log("eeeeeeeee", e)
-                if (Array.isArray(e) && e.length > 0) {
-                    Setdata(JSON.parse(e))
+                let arr = JSON.parse(e);
+                if (Array.isArray(arr) && arr.length > 0) {
+                    Setdata(arr)
                 }
             })
         });
@@ -32,8 +33,10 @@ const Home = ({ navigation }) => {
 
     useEffect(() => {
         AsyncStorage.getItem("userData").then((e) => {
-            if (e && Array.isArray(e)) {
-                Setdata(e)
+            let arr = JSON.parse(e);
+            console.log("arr: ", e);
+            if (arr && Array.isArray(arr)) {
+                Setdata(arr);
             } else {
                 AsyncStorage.setItem("userData", JSON.stringify([]))
             }
@@ -192,8 +195,43 @@ const Home = ({ navigation }) => {
                             console.log("item", item)
 
                             return <Fragment key={i} >
-                                <Text>{item}
-                                </Text>
+                                {/* <Text>{item}</Text> */}
+                                <View style={{ height: "100%", width: Dimensions.get('window').width, borderRadius: 10, backgroundColor: COLORS.primary, marginRight: 10 }}>
+                                    <View style={{ left: 7, top: 5 }}>
+                                        <Text style={{ fontSize: 16, color: "#ccc" }}>
+                                            {item["PersonalDetails"]["FirstName"]} {item["PersonalDetails"]["LastName"]}
+                                        </Text>
+                                        <Text style={{ fontSize: 25, fontWeight: '700', color: "#fff" }}>
+                                            $50000
+                                        </Text>
+                                        <View style={{ top: 10, width: "89%", justifyContent: 'center', }}>
+                                            <ProgressBar progress={0.5} color={"#fff"} />
+                                        </View>
+
+                                        <View style={{ top: 10, left: "4%", width: '85%', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                            <Text style={{ fontSize: 18, color: "#fff" }}>
+                                                Apply
+                                            </Text>
+                                            <Text style={{ fontSize: 18, color: "#fff" }}>
+                                                Review
+                                            </Text><Text style={{ fontSize: 18, color: "#ccc" }}>
+                                                Approval
+                                            </Text>
+                                        </View>
+                                        {/* <TouchableOpacity style={{ top: 25, width: '95%', height: 45, flexDirection: 'row', justifyContent: 'space-between', justifyContent: 'center', alignItems: 'center' }}
+                                            onPress={() => {
+                                                navigation.navigate({ name: "Loan", merge: true });
+                                            }}
+                                        >
+                                            <View style={{ height: 40, width: '40%', borderColor: "#fff", borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 8 }}>
+                                                <Text style={{ fontSize: 18, fontWeight: 'bold', color: "#fff" }}>
+                                                    Apply Now
+                                                </Text>
+                                            </View>
+                                        </TouchableOpacity> */}
+                                    </View>
+
+                                </View>
                             </Fragment>
                         })
                     }
