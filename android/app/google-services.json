@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "64851009299",
+    "project_id": "loan-49728",
+    "storage_bucket": "loan-49728.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:64851009299:android:96dfe219394cc9a85d44e6",
+        "android_client_info": {
+          "package_name": "com.digitalwalletapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "64851009299-7hm87v2q459rmnvoms8crlt3csba239a.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.digitalwalletapp",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "64851009299-hutrlgoosve0phinr9d8qm3vkprcg469.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD6yN_o2BYJF_oWMHD8TTVITLTiAXN6xW4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "64851009299-hutrlgoosve0phinr9d8qm3vkprcg469.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

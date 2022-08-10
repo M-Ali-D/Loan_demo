@@ -10,17 +10,25 @@ import {
     FlatList,
     KeyboardAvoidingView,
     ScrollView,
-    Platform
+    Platform,
+    // AsyncStorage
 } from "react-native"
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import LinearGradient from 'react-native-linear-gradient'
+import auth from '@react-native-firebase/auth';
 
 import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 
 const SignUp = ({ navigation }) => {
 
     const [showPassword, setShowPassword] = React.useState(false)
+    const [phone, Setphone] = React.useState(false)
+    const [code, setCode] = React.useState(false)
+    const [confirm, setConfirm] = React.useState(null);
+    const [name, setName] = React.useState(null);
 
     const [areas, setAreas] = React.useState([])
+    const [otp, setotp] = React.useState(null)
     const [selectedArea, setSelectedArea] = React.useState(null)
     const [modalVisible, setModalVisible] = React.useState(false)
 
@@ -49,6 +57,34 @@ const SignUp = ({ navigation }) => {
             })
     }, [])
 
+    const sendOtp = async () => {
+        setotp(true)
+        const confirmation = await auth().signInWithPhoneNumber("+91" + phone);
+        console.log("confirmation", "+91" + phone)
+        setConfirm(confirmation);
+    }
+    const confirmCode = async () => {
+
+        if (phone && code) {
+            if (name) {
+                await AsyncStorage.setItem('Name', name + "")
+                await AsyncStorage.setItem('Phone', phone + "")
+            } else {
+                await AsyncStorage.setItem('Phone', phone + "")
+            }
+            try {
+                await confirm.confirm(code);
+                // console.log('code right');
+                navigation.navigate("Home")
+            } catch (error) {
+                console.log('Invalid code.');
+            }
+        }
+        else {
+            alert("Please fill all data")
+        }
+    }
+
     function renderHeader() {
         return (
             <TouchableOpacity
@@ -58,17 +94,8 @@ const SignUp = ({ navigation }) => {
                     marginTop: SIZES.padding * 6,
                     paddingHorizontal: SIZES.padding * 2
                 }}
-                onPress={() => console.log("Sign Up")}
+            // onPress={() => console.log("Sign Up")}
             >
-                <Image
-                    source={icons.back}
-                    resizeMode="contain"
-                    style={{
-                        width: 20,
-                        height: 20,
-                        tintColor: COLORS.white
-                    }}
-                />
 
                 <Text style={{ marginLeft: SIZES.padding * 1.5, color: COLORS.white, ...FONTS.h4 }}>Sign Up</Text>
             </TouchableOpacity>
@@ -77,22 +104,7 @@ const SignUp = ({ navigation }) => {
 
     function renderLogo() {
         return (
-            <View
-                style={{
-                    marginTop: SIZES.padding * 5,
-                    height: 100,
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }}
-            >
-                <Image
-                    source={images.wallieLogo}
-                    resizeMode="contain"
-                    style={{
-                        width: "60%"
-                    }}
-                />
-            </View>
+            <></>
         )
     }
 
@@ -117,6 +129,11 @@ const SignUp = ({ navigation }) => {
                             ...FONTS.body3
                         }}
                         placeholder="Enter Full Name"
+                        onChange={(e) => {
+                            // console.log(e.nativeEvent.text)
+                            setName(e.nativeEvent.text)
+
+                        }}
                         placeholderTextColor={COLORS.white}
                         selectionColor={COLORS.white}
                     />
@@ -138,7 +155,7 @@ const SignUp = ({ navigation }) => {
                                 flexDirection: 'row',
                                 ...FONTS.body2
                             }}
-                            onPress={() => setModalVisible(true)}
+                        // onPress={() => setModalVisible(true)}
                         >
                             <View style={{ justifyContent: 'center' }}>
                                 <Image
@@ -151,14 +168,9 @@ const SignUp = ({ navigation }) => {
                                 />
                             </View>
                             <View style={{ justifyContent: 'center', marginLeft: 5 }}>
-                                <Image
-                                    source={{ uri: selectedArea?.flag }}
-                                    resizeMode="contain"
-                                    style={{
-                                        width: 30,
-                                        height: 30
-                                    }}
-                                />
+                                <Text style={{ color: COLORS.white, ...FONTS.body3 }}>{selectedArea?.callingCode}
+                                    +91
+                                </Text>
                             </View>
 
                             <View style={{ justifyContent: 'center', marginLeft: 5 }}>
@@ -178,49 +190,63 @@ const SignUp = ({ navigation }) => {
                                 ...FONTS.body3
                             }}
                             placeholder="Enter Phone Number"
+                            keyboardType={"number-pad"}
                             placeholderTextColor={COLORS.white}
+                            onChange={(e) => {
+                                Setphone(e.nativeEvent.text)
+                                if (e.nativeEvent.text.length == 0) {
+                                    setotp(null)
+                                }
+                                console.log(e)
+                            }}
                             selectionColor={COLORS.white}
                         />
                     </View>
                 </View>
 
                 {/* Password */}
-                <View style={{ marginTop: SIZES.padding * 2 }}>
-                    <Text style={{ color: COLORS.lightGreen, ...FONTS.body3 }}>Password</Text>
-                    <TextInput
-                        style={{
-                            marginVertical: SIZES.padding,
-                            borderBottomColor: COLORS.white,
-                            borderBottomWidth: 1,
-                            height: 40,
-                            color: COLORS.white,
-                            ...FONTS.body3
-                        }}
-                        placeholder="Enter Password"
-                        placeholderTextColor={COLORS.white}
-                        selectionColor={COLORS.white}
-                        secureTextEntry={!showPassword}
-                    />
-                    <TouchableOpacity
-                        style={{
-                            position: 'absolute',
-                            right: 0,
-                            bottom: 10,
-                            height: 30,
-                            width: 30
-                        }}
-                        onPress={() => setShowPassword(!showPassword)}
-                    >
-                        <Image
-                            source={showPassword ? icons.disable_eye : icons.eye}
+                {otp && <>
+                    <View style={{ marginTop: SIZES.padding * 2 }}>
+                        <Text style={{ color: COLORS.lightGreen, ...FONTS.body3 }}>Otp</Text>
+                        <TextInput
                             style={{
-                                height: 20,
-                                width: 20,
-                                tintColor: COLORS.white
+                                marginVertical: SIZES.padding,
+                                borderBottomColor: COLORS.white,
+                                borderBottomWidth: 1,
+                                height: 40,
+                                color: COLORS.white,
+                                ...FONTS.body3
                             }}
+                            placeholder="Enter Otp"
+                            keyboardType={"number-pad"}
+                            onChangeText={(e) => {
+                                setCode(e)
+                            }}
+                            placeholderTextColor={COLORS.white}
+                            selectionColor={COLORS.white}
+                            secureTextEntry={!showPassword}
                         />
-                    </TouchableOpacity>
-                </View>
+                        <TouchableOpacity
+                            style={{
+                                position: 'absolute',
+                                right: 0,
+                                bottom: 10,
+                                height: 30,
+                                width: 30
+                            }}
+                            onPress={() => setShowPassword(!showPassword)}
+                        >
+                            <Image
+                                source={showPassword ? icons.disable_eye : icons.eye}
+                                style={{
+                                    height: 20,
+                                    width: 20,
+                                    tintColor: COLORS.white
+                                }}
+                            />
+                        </TouchableOpacity>
+                    </View>
+                </>}
             </View>
         )
     }
@@ -236,7 +262,18 @@ const SignUp = ({ navigation }) => {
                         alignItems: 'center',
                         justifyContent: 'center'
                     }}
-                    onPress={() => navigation.navigate("Home")}
+                    onPress={() => {
+                        if (phone.length<11) {
+                            if (otp) {
+                                confirmCode()
+                            } else
+                                sendOtp()
+                        } else {
+                            alert("Please fill all data")
+                        }
+                    }
+
+                    }
                 >
                     <Text style={{ color: COLORS.white, ...FONTS.h3 }}>Continue</Text>
                 </TouchableOpacity>

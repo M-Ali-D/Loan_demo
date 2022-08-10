@@ -10,9 +10,12 @@ import Svg, {
     Path
 } from 'react-native-svg'
 import { isIphoneX } from 'react-native-iphone-x-helper'
-
-import { Home, Scan } from "../screens"
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import { Home, Scan,Loan1 } from "../screens"
 import { COLORS, icons } from "../constants"
+import Loan from "../screens/Loan";
+import Profile from "../screens/Profile";
+
 
 const Tab = createBottomTabNavigator()
 
@@ -153,7 +156,7 @@ const Tabs = () => {
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
-                            source={icons.scan}
+                            source={icons.search}
                             resizeMode="contain"
                             style={{
                                 width: 25,
@@ -171,11 +174,33 @@ const Tabs = () => {
             />
             <Tab.Screen
                 name="User"
-                component={Home}
+                component={Profile}
                 options={{
                     tabBarIcon: ({ focused }) => (
                         <Image
                             source={icons.user}
+                            resizeMode="contain"
+                            style={{
+                                width: 25,
+                                height: 25,
+                                tintColor: focused ? COLORS.white : COLORS.secondary
+                            }}
+                        />
+                    ),
+                    tabBarButton: (props) => (
+                        <TabBarCustomButton
+                            {...props}
+                        />
+                    )
+                }}
+            />
+            <Tab.Screen
+                name="Loan"
+                component={Loan}
+                options={{
+                    tabBarIcon: ({ focused }) => (
+                        <Image
+                            source={icons.Loan}
                             resizeMode="contain"
                             style={{
                                 width: 25,

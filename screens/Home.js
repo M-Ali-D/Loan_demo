@@ -1,15 +1,45 @@
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import React, { useEffect, useState } from "react";
 import {
     SafeAreaView,
     View,
     Text,
     Image,
     FlatList,
-    TouchableOpacity
+    TouchableOpacity,
+    ScrollView,
+    Dimensions
 } from "react-native"
+import { ProgressBar, MD3Colors } from "react-native-paper";
 import { COLORS, SIZES, FONTS, icons, images } from "../constants"
 
-const Home = () => {
+
+
+const Home = ({ navigation }) => {
+    const [data1, Setdata] = useState([])
+    useEffect(() => {
+        const unsubscribe = navigation.addListener('focus', () => {
+            AsyncStorage.getItem("userData").then((e) => {
+                console.log("eeeeeeeee",e)
+                if (e.length>0) {
+                    Setdata(JSON.parse(e))
+                }
+            })
+        });
+        return unsubscribe;
+    }, [navigation]);
+
+
+    useEffect(() => {
+        AsyncStorage.getItem("userData").then((e) => {
+            if (e) {
+                Setdata(e)
+            } else {
+                AsyncStorage.setItem("userData", JSON.stringify([]))
+            }
+        })
+        console.log("dataaaaaaaa", data1.length )
+    }, [])
 
     const featuresData = [
         {
@@ -104,8 +134,8 @@ const Home = () => {
         return (
             <View style={{ flexDirection: 'row', marginVertical: SIZES.padding * 2 }}>
                 <View style={{ flex: 1 }}>
-                    <Text style={{ ...FONTS.h1 }}>Hello!</Text>
-                    <Text style={{ ...FONTS.body2, color: COLORS.gray }}>ByProgrammers</Text>
+                    <Text style={{ ...FONTS.h1 }}>Get Loan</Text>
+                    <Text style={{ ...FONTS.body2, color: COLORS.gray }}>By Shyft Bank</Text>
                 </View>
 
                 <View style={{ alignItems: 'center', justifyContent: 'center' }}>
@@ -149,19 +179,70 @@ const Home = () => {
         return (
             <View
                 style={{
-                    height: 120,
+                    height: 180,
+                    width: Dimensions.get('window').width - 38,
                     borderRadius: 20,
                 }}
             >
-                <Image
-                    source={images.banner}
-                    resizeMode="cover"
-                    style={{
-                        width: "100%",
-                        height: "100%",
-                        borderRadius: 20
-                    }}
-                />
+                <ScrollView
+                    horizontal
+                    style={{ height: 120, width: "100%", }}>
+                    {
+                        data1.length > 0 && data1.map((item) => {
+                            console.log("item", item)
+
+                            return <>
+                                <Text>{item}
+                                </Text>
+                            </>
+                        })
+                    }
+                    <View style={{ height: "100%", width: Dimensions.get('window').width, borderRadius: 10, backgroundColor: COLORS.primary, }}>
+                        <View style={{ left: 7, top: 5 }}>
+                            <Text style={{ fontSize: 16, color: "#ccc" }}>
+                                Maximum Amount
+                            </Text>
+                            <Text style={{ fontSize: 25, fontWeight: '700', color: "#fff" }}>
+                                $50000
+                            </Text>
+                            <View style={{ top: 10, width: "89%", justifyContent: 'center', }}>
+                                <ProgressBar progress={0.1} color={"#fff"} />
+                            </View>
+
+                            <View style={{ top: 10, left: "4%", width: '85%', flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <Text style={{ fontSize: 18, color: "#fff" }}>
+                                    Apply
+                                </Text>
+                                <Text style={{ fontSize: 18, color: "#ccc" }}>
+                                    Review
+                                </Text><Text style={{ fontSize: 18, color: "#ccc" }}>
+                                    Approval
+                                </Text>
+                            </View>
+                            <TouchableOpacity style={{ top: 25, width: '95%', height: 45, flexDirection: 'row', justifyContent: 'space-between', justifyContent: 'center', alignItems: 'center' }}
+                                onPress={() => {
+                                    navigation.navigate({ name: "Loan", merge: true });
+                                }}
+                            >
+                                <View style={{ height: 40, width: '40%', borderColor: "#fff", borderWidth: 1, justifyContent: 'center', alignItems: 'center', borderRadius: 8 }}>
+                                    <Text style={{ fontSize: 18, fontWeight: 'bold', color: "#fff" }}>
+                                        Apply Now
+                                    </Text>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+                    {/* <Image
+                            source={images.banner}
+                            resizeMode="cover"
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                borderRadius: 20
+                            }}
+                        /> */}
+                </ScrollView>
             </View>
         )
     }

@@ -13,6 +13,8 @@ import { createStackNavigator } from "@react-navigation/stack";
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 
 import Tabs from "./navigation/tabs";
+import Loan from './screens/Loan';
+import Profile from './screens/Profile';
 
 const theme = {
     ...DefaultTheme,
@@ -31,14 +33,15 @@ const App = () => {
                 screenOptions={{
                     headerShown: false
                 }}
-                initialRouteName={'SignUp'}
+                initialRouteName={'Home'}
             >
                 <Stack.Screen name="SignUp" component={SignUp} />
 
                 {/* Tabs */}
                 <Stack.Screen name="Home" component={Tabs} />
+                <Stack.Screen name="Profile" component={Profile} />
 
-                {/* <Stack.Screen name="Scan" component={Scan} /> */}
+                <Stack.Screen name="Loan" component={Loan} />
             </Stack.Navigator>
         </NavigationContainer>
     )
